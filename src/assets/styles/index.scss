@@ -1,0 +1,16 @@
+// 全局样式
+body {
+  font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  font-size: 14px;
+  height: 100%;
+  .root {
+    height: 100%;
+  }
+  * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+  }
+}
+// 覆盖better-scroll样式
+.bscroll-indicator { background-color: rgba($color: #aaa, $alpha: 0.8) !important; width: 4px !important; right: 0 !important; }

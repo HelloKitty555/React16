@@ -1,0 +1,81 @@
+{
+  "watermark": false,
+  "preview": false,
+  "previewType": [
+    "jpg",
+    "jpeg",
+    "png",
+    "pdf",
+    "doc",
+    "ppt",
+    "xls",
+    "docx",
+    "pptx",
+    "xlsx"
+  ],
+  "disableExtranetDownload": false,
+  "enableAnalytics": true,
+  "useGeneralAvatar": true,
+  "useGeneralAvatarTextRule": false,
+  "generalAvatarTextMatchRule": {},
+  "avatarColors": [
+    "#319fd8",
+    "#776d9c",
+    "#ab6579",
+    "#7185a3",
+    "#b36d63",
+    "#aa8278",
+    "#c65961"
+  ],
+  "settingMenu": {
+    "logout": true,
+    "about": false,
+    "signature": true,
+    "secondAuth": false,
+    "calendar": false,
+    "notification": false
+  },
+  "featureControl": {
+    "addressBook": {
+      "enableAddressBook": true,
+      "enableOrganization": true,
+      "enablePersonal": true,
+      "enableStarEntrance": true,
+      "enableMarkStarDept": true,
+      "enableMarkStarContact": true,
+      "enableMarkStar": true,
+      "enableContactSelectEntrance": true,
+      "enableOrganizationSelectEntrance": true,
+      "enablePersonalSelectEntrance": true,
+      "enableStarSelectEntrance": true
+    },
+    "schedule": {
+      "enableSchedule": true
+    },
+    "fileCenter": {
+      "enableFileCenter": true,
+      "enableEnterpriseNetworkDisk": true,
+      "enablePersonalNetworkDisk": true,
+      "enableSelectFromEnterpriseNetworkDisk": true,
+      "enableSelectFromPersonalNetworkDisk": true,
+      "enableMoveToPersonalNetworkDisk": true
+    },
+    "compose": {
+      "enableFileUpload": true,
+      "enableFileUploadFromLocal": true,
+      "enableFileUploadFromFileCenter": true
+    },
+    "read": {
+      "enableAttachmentDownload": true
+    },
+    "network": {
+      "enableFileDownload": true
+    }
+  },
+  "enableHyperLinkSecurityAlert": true,
+  "secureHyperLinkList": [
+  ],
+  "enableMailCache": true,
+  "mailCacheLimit": 50,
+  "mailCacheEncrypt": false
+}

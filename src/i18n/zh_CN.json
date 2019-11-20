@@ -1,0 +1,15 @@
+{
+  "LOGIN": {
+    "LOGIN": "登录",
+    "ACCOUNT": "账户",
+    "PASSWORD": "密码",
+    "VERIFYCODE": "验证码",
+    "LANGUAGE": "语言"
+  },
+  "MAIN": {
+    "ADDRESSBOOK" : "通讯录",
+    "SCHEDULE": "日程",
+    "FILECENTER": "文件中心",
+    "SETTING": "设置中心"
+  }
+}
