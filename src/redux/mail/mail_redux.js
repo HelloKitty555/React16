@@ -1,13 +1,6 @@
 
 import wmsvrApi from 'network/api'
 
-// action types
-const GETALLFOLDERS_PENDING = 'GETALLFOLDER_PENDING'
-const GETALLFOLDERS_SUCCESS = 'GETALLFOLDER_SUCCESS'
-const GETALLFOLDERS_FAILURE = 'GETALLFOLDER_FAILURE'
-const ACTIVE_FOLDER = 'ACTIVE_FOLDER'
-const ACTIVE_READ_MID = 'ACTIVE_READ_MID'
-
 // init state
 const initState = {
   folders: {
@@ -15,21 +8,25 @@ const initState = {
     data: [],
     hasError: false
   },
+  messageListMap: {},
   activeFolderFid: 1,
-  activeReadMid: null
+  activeReadMid: null,
 }
 
 // reducer
 export function mail(state = initState, action) {
   switch (action.type) {
-    case GETALLFOLDERS_FAILURE:
-    case GETALLFOLDERS_PENDING:
-    case GETALLFOLDERS_SUCCESS:
+    case 'GETALLFOLDER_FAILURE':
+    case 'GETALLFOLDER_PENDING':
+    case 'GETALLFOLDER_SUCCESS':
       return { ...state, ...action.payload }
-    case ACTIVE_FOLDER:
+    case 'ACTIVE_FOLDER':
       return { ...state, ...action.payload }
-    case ACTIVE_READ_MID:
+    case 'ACTIVE_READ_MID':
       return { ...state, ...action.payload }
+    case 'SAVE_MESSAGE':
+      state.messageListMap = { ...state.messageListMap, ...action.payload }
+      return { ...state }
     default:
       return state
   }
@@ -100,5 +97,14 @@ export function getAllFolders() {
       console.log(error)
       dispatch(getAllFoldersFailure())
     })
+  }
+}
+// 保存特定文件夹的信件列表数据到store中
+export function saveMessage(fid, messageList) {
+  return {
+    type: 'SAVE_MESSAGE',
+    payload: {
+      [fid]: messageList
+    }
   }
 }

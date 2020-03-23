@@ -1,11 +1,15 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme) => ({
+  text: {
+  }
+}))
 
 export default function Contact(props) {
   const { contactInfo } = props
+  const classes = useStyles()
   return (
-    <Typography component="span" color="primary" variant="subtitle2">
-      {contactInfo.name || contactInfo.email}
-    </Typography>
+    <span className={classes.text}>{contactInfo.name || contactInfo.email}</span>
   )
 }

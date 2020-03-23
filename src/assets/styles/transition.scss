@@ -1,0 +1,18 @@
+// fade-slide过渡效果，效果可见邮件列表的筛选功能
+.fade-slide-enter {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+.fade-slide-enter-active {
+  opacity: 1;
+  transition: all 200ms;
+  transform: translateY(0);
+}
+.fade-slide-exit {
+  opacity: 1;
+}
+.fade-slide-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 200ms;
+}

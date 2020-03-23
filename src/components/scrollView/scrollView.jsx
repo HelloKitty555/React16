@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ScrollView(props) {
   const classes = useStyles()
-  const {click, scrollX, scrollY, scrollbar, mouseWheel, onPullDownRefresh, onPullUpLoad, children, svHeight, data} = props
+  const {scrollX, scrollY, scrollbar, mouseWheel, onPullDownRefresh, onPullUpLoad, children, svHeight, data, disableBounce} = props
   const [wrapper, setWrapper] = useState('')
   const [PullDownTip, setPullDownTip] = useState('')
   const [fetching, setFetching] = useState(false)
@@ -30,7 +30,6 @@ export default function ScrollView(props) {
   useEffect(() => {
     if (wrapper) {
       setFetching(false)
-      setPullDownTip('下拉以刷新')
       wrapper.finishPullDown()
       wrapper.finishPullUp()
       wrapper.refresh()
@@ -47,20 +46,36 @@ export default function ScrollView(props) {
   function initScrollView() {
     let pullDownRefresh = false
     let pullUpLoad = false
+    let bounce = {
+      top: true,
+      bottom: false,
+      left: true,
+      right: true
+    }
     if (onPullDownRefresh) {
       pullDownRefresh = true
     }
     if (onPullUpLoad) {
       pullUpLoad = true
     }
+    if (disableBounce) {
+      bounce = {
+        top: false,
+        bottom: false,
+        left: false,
+        right: false
+      }
+    }
     const bscrollConfig = {
+      bounce,
       momentum: true,
       probeType: 1,
-      scrollX: scrollX,
+      click: true,
+      tap: true,
+      scrollX: true,
       scrollY: scrollY,
       scrollbar: scrollbar,
       mouseWheel: mouseWheel,
-      click: click,
       pullDownRefresh: pullDownRefresh,
       pullUpLoad: pullUpLoad
     }

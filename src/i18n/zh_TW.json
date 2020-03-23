@@ -1,2 +1,45 @@
 {
+  "LOGIN": {
+    "LOGIN": "登錄",
+    "ACCOUNT": "賬戶",
+    "PASSWORD": "密碼",
+    "VERIFYCODE": "驗證碼",
+    "LANGUAGE": "語言"
+  },
+  "MAIN": {
+    "MAIL": {
+      "NEW_MAIL": "新建郵件",
+      "INBOX": "收件箱",
+      "DRAFT": "草稿箱",
+      "SENT": "已發送",
+      "TRASH": "已刪除",
+      "SPAM": "垃圾郵件",
+      "VIRUS": "病毒文件夾",
+      "ALL": "所有",
+      "UNREAD": "未讀",
+      "FLAG": "旗幟",
+      "URGENT": "緊急郵件",
+      "ATTACH": "帶附件",
+      "FROM": "發件人",
+      "TO": "收件人",
+      "CC": "抄送",
+      "BCC": "密送",
+      "SUBJECT": "主題",
+      "SEND": "發送",
+      "CANCEL": "取消",
+      "SEND_TO_ME": "發送至我",
+      "NO_SUBJECT": "（無主題）",
+      "LACK_OF_SUBJECT": "缺少主題",
+      "SEND_WITHOUT_SUBJECT": "是否要不帶主題發送",
+      "NO_MAIL": "該文件夾下沒有郵件",
+      "SEARCHING": "正在搜索中...",
+      "NO_RESULT_FOUND": "未找到任何結果",
+      "MESSAGE_SUCCESS": "信件發送成功",
+      "MESSAGE_FAIL": "信件發送失敗",
+      "NO_RECEVIER": "未選擇收件人"
+    },
+    "SCHEDULE": {},
+    "ADDRESSBOOK": {},
+    "NETDISK": {}
+  }
 }

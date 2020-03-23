@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useSelector, useDispatch } from 'react-redux'
 import FolderItem from 'components/folderList/folderItem'
-import { getAllFolders} from '_redux/mail/mail_redux'
+import wmsvrApi from 'network/api'
+import SkeletonLoading from './skeletonLoading'
 
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
   },
   nested: {
     paddingLeft: theme.spacing(4),
@@ -22,16 +21,28 @@ export default function NestedList(props) {
   const dispatch = useDispatch()
   const [open, setOpen] = useState(true)
   const folders = useSelector(state => state.mail.folders.data)
+  const [folderList, setFolderList] = useState([])
   const {handleFolderItemClick} = props
-  useEffect(() => {
-    dispatch(getAllFolders())
+  const [isFetching, setIsFetching] = useState(false)
+  useEffect(() =>{
+    setIsFetching(true)
+    wmsvrApi.getAllFolders().then(data => {
+      if (data && data.code === 'S_OK') {
+        setFolderList(data.var)
+      }
+    }, error => {
+      console.log(error)
+    }).finally(() => {
+      setIsFetching(false)
+    })
   }, [])
   return (
     <List
       component="nav"
       className={classes.root}
     >
-      {folders.map((folder) => <FolderItem folderInfo={folder} key={folder.id} paddingLeft={0} onClick={handleFolderItemClick}/>)}
+      {folderList.map((folder) => <FolderItem folderInfo={folder} key={folder.id} paddingLeft={0} onClick={handleFolderItemClick}/>)}
+      { isFetching ? <SkeletonLoading /> : ''}
     </List>
   )
 }

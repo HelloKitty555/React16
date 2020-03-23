@@ -13,7 +13,9 @@ function post(func, payload) {
 
 const wmsvrApi = {
   // 登录及安全
-  login: payload => post('user:login', payload),
+  login: payload => post('user:login', payload), // 登录
+  logout: payload => post('user:logout', payload), // 登出
+  getAttrs: payload => post('user:getAttrs', payload), // 获取用户属性
   // 邮箱模块
   getAllFolders: payload => post('mbox:getAllFolders', payload), // 获取所有文件夹
   listMessages: payload => post('mbox:listMessages', payload), // 列举邮件
@@ -25,6 +27,8 @@ const wmsvrApi = {
   getAliasWithSeed: payload => post('user:getAliasWithSeed', payload),
   getPOPAccounts: payload => post('user:getPOPAccounts', payload),
   listSharedAccessMbox: payload => post('mbox:listSharedAccessMbox', payload),
+  restoreDraft: payload => post('mbox:restoreDraft', payload), // 恢复草稿
+  autoMatch: payload => post('oab:autoMatch', payload) // 组织联系人自动匹配
   // 组织通讯录
   // 个人通讯录
   // 日程功能

@@ -1,7 +1,7 @@
 import errorCode from './errorCode'
 import Cookie from 'js-cookie'
 
-const DEV_BASE_URL = 'http://localhost:8989/coremail/s/'
+const DEV_BASE_URL = '/coremail/s/'
 const PROD_BASE_URL = '/coremail/s'
 
 export function getBaseUrl() {

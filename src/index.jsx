@@ -7,13 +7,18 @@ import App from './app'
 import store from './redux/store'
 import './assets/iconfont/iconfont.css'
 import './assets/styles/index.scss'
+import './assets/styles/transition.scss'
+import Cookie from 'js-cookie'
+import { SnackbarProvider } from 'notistack'
 
 
 function renderWithHotReload(RootElement) {
   ReactDOM.render(
     <ReactHotLoader>
       <Provider store={store}>
-        {RootElement}
+        <SnackbarProvider maxSnack={3} autoHideDuration={1500} anchorOrigin={{ vertical: 'top', horizontal: 'center', }} hideIconVariant>
+          {RootElement}
+        </SnackbarProvider>
       </Provider>
     </ReactHotLoader>,
     document.getElementById('root')
@@ -32,6 +37,11 @@ intl.init({
 })
 renderWithHotReload(<App />)
 
+// 单点进入保存sid到cookie中
+const sid = window.location.search.split('=')[1]
+if (sid) {
+  Cookie.set('Coremail.sid', sid)
+}
 
 // 模块热替换[HMR]（hot module replacement）
 if (module.hot) {

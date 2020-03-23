@@ -1,16 +1,84 @@
 // 全局样式
+html {
+  height: 100%;
+  width: 100%;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 body {
   font-family: "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   height: 100%;
-  .root {
+  width: 100%;
+  background-color: rgb(250,250,250);
+  #root {
     height: 100%;
-  }
-  * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    width: 100%;
   }
 }
 // 覆盖better-scroll样式
 .bscroll-indicator { background-color: rgba($color: #aaa, $alpha: 0.8) !important; width: 4px !important; right: 0 !important; }
+
+// 路由转场动画
+/* 路由前进时的入场/离场动画 */
+.forward-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.forward-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all cubic-bezier(0.36, 0.66, 0.04, 1) 500ms;
+}
+
+.forward-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.forward-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all cubic-bezier(0.36, 0.66, 0.04, 1) 500ms;
+}
+
+/* 路由后退时的入场/离场动画 */
+.back-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.back-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all cubic-bezier(0.36, 0.66, 0.04, 1) 500ms;
+}
+
+.back-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.back-exit-active {
+  opacity: 0;
+  transform: translate(100%);
+  transition: all cubic-bezier(0.36, 0.66, 0.04, 1) 500ms;
+}
+// 全局滚动条样式
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset006pxrgba(0,0,0,0.3);
+  border-radius: 2px;
+  }
+::-webkit-scrollbar-thumb {
+    border-radius:3px;
+    background:rgba(0,0,0,0.1);
+    -webkit-box-shadow:inset006pxrgba(0,0,0,0.5);
+}

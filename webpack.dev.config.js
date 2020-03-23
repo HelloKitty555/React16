@@ -1,7 +1,9 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
-const backEndServer = 'http://mt.icoremail.net'
+// const backEndServer = 'http://lunkrcm05.rd.mt'
+// const backEndServer = 'http://mt1.icoremail.net'
+const backEndServer = 'http://cim.rd.mt'
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -51,7 +53,7 @@ module.exports = {
   ],
   devServer: {
     contentBase: path.join(__dirname, './dist'),
-    port: 8989,
+    port: 8080,
     hot: true,
     historyApiFallback: true,
     host: '0.0.0.0',

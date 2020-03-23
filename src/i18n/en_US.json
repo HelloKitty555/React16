@@ -1,5 +1,45 @@
 {
   "LOGIN": {
-    "LOGIN": "Login"
+    "LOGIN": "Login",
+    "ACCOUNT": "Username",
+    "PASSWORD": "Password",
+    "VERIFYCODE": "verify code",
+    "LANGUAGE": "language"
+  },
+  "MAIN": {
+    "MAIL": {
+      "NEW_MAIL": "New Message ",
+      "INBOX": "Inbox",
+      "DRAFT": "Draft",
+      "SENT": "Sent",
+      "TRASH": "Trash",
+      "SPAM": "Spam",
+      "VIRUS": "Virus",
+      "ALL": "All",
+      "UNREAD": "Unread",
+      "FLAG": "Flagged",
+      "URGENT": "Urgent",
+      "ATTACH": "Attchments",
+      "FROM": "From",
+      "TO": "To",
+      "CC": "Cc",
+      "BCC": "Bcc",
+      "SUBJECT": "Subject",
+      "SEND": "Send",
+      "CANCEL": "Cancel",
+      "SEND_TO_ME": "send to me",
+      "NO_SUBJECT": "(no subject)",
+      "LACK_OF_SUBJECT": "Lack of subject",
+      "SEND_WITHOUT_SUBJECT": "Send without subject?",
+      "NO_MAIL": "NO MAIL",
+      "SEARCHING": "正在搜索中...",
+      "NO_RESULT_FOUND": "未找到任何結果",
+      "MESSAGE_SUCCESS": "信件發送成功",
+      "MESSAGE_FAIL": "信件發送失敗",
+      "NO_RECEVIER": "未選擇收件人"
+    },
+    "SCHEDULE": {},
+    "ADDRESSBOOK": {},
+    "NETDISK": {}
   }
 }

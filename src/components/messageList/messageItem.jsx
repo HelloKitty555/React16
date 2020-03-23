@@ -1,53 +1,113 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import UserAvatar from 'components/userAvatar/userAvatar'
 import ListItem from '@material-ui/core/ListItem'
-import parse from 'utils/email'
+import { parse } from 'utils/email'
 import { useSelector } from 'react-redux'
+import Hidden from '@material-ui/core/Hidden'
+import { useParams } from 'react-router-dom'
+import CustomIcon from 'components/customIcon/customIcon'
+import { isSameDate, isYesterday, getTimeSimple, isTheDayBeforeYesterday, isSameYear, getTextWithoutYear, getTextSimple, getCurrentDate } from 'utils/date'
+import intl from 'react-intl-universal'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: '15px',
+    padding: '15px 15px 15px 15px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowarp'
+    // borderBottom: '1px solid rgb(237,235,233)'
+  },
+  rootActive: {
+    padding: '15px 15px 15px 15px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowarp',
+    backgroundColor: theme.palette.primary.light
   },
   activeHighLightBar: {
-    width: '3px',
+    width: '4px',
     height: '100%',
-    backgroundColor: theme.palette.primary.main
+    backgroundColor: theme.palette.primary
+  },
+  info: {
+    flex: 1,
+    marginLeft: '10px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowarp'
+  },
+  sender_flags: {
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   sender: {
-    fontSize: '14px',
+    fontSize: '13px',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
+    color: '#212121',
+    maxWidth: '50%',
     fontWeight: props => (props.read ? 'normal' : 'bolder')
+  },
+  flags: {
   },
   subject: {
-    fontSize: '14px',
+    fontSize: '12px',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
+    color: '#858585',
+    marginTop: '5px',
     fontWeight: props => (props.read ? 'normal' : 'bolder')
   },
-  summary: {
-    fontSize: '14px',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    overflow: 'hidden',
-    fontWeight: props => (props.read ? 'normal' : 'bolder')
+  attachment: {
+  },
+  date: {
+    fontSize: '13px',
+    color: '#C2C2C2'
   }
 }))
 
 export default function MessageItem(props) {
   const { message } = props
-  const classes = useStyles({read: message.flags.read })
+  const classes = useStyles({ read: message.flags.read })
   const fromParseResult = parse(message.from)
-  const activeReadMid = useSelector(state => state.mail.activeReadMid )
+  const activeReadMid = useSelector(state => state.mail.activeReadMid)
+  const { fid } = useParams()
+  const sentDate = formatTime(message.sentDate)
+  function formatTime(str) {
+    // IOS中,safari不支持YYYY-MM-DD的格式,可以转成YYYY/MM/DD的格式
+    const time = new Date(str.replace(/-/g, '/'))
+    if (isSameDate(getCurrentDate(), time)) {
+      return getTimeSimple(time)
+    } else if (isYesterday(time, getCurrentDate())) {
+      return '昨天'
+    } else if (isTheDayBeforeYesterday(time, getCurrentDate())) {
+      return '前天'
+    } else if (isSameYear(getCurrentDate(), time)) {
+      return getTextWithoutYear(time)
+    } else {
+      return getTextSimple(time)
+    }
+  }
   return (
-    <ListItem button className={classes.root}>
-      <Grid container wrap="nowrap" spacing={2}>
-        {activeReadMid === message.id ? <Grid item><div className={classes.activeHighLightBar} /></Grid> : ''}
+    <ListItem button className={activeReadMid === message.id ? classes.rootActive : classes.root}>
+      <div><UserAvatar userInfo={{ uid: fromParseResult[0].email, name: fromParseResult[0].name }} size="35px" /></div>
+      <div className={classes.info}>
+        <div className={classes.sender_flags}>
+          <div className={classes.sender}>{fromParseResult[0].name || fromParseResult[0].email}</div>
+          <div className={classes.flags}>
+            {message.flags.calendar ? <CustomIcon iconName="icon-icon_schedule1" size="16px" /> : ''}
+            {message.flags.flagged ? <CustomIcon iconName="icon-iconflagcolor" size="16px" /> : ''}
+            {message.flags.attached || message.flags.linkAttached ? <span className={classes.attachment}><CustomIcon iconName="icon-iconaccessory" size="16px" /></span> : ''}
+            <span className={classes.date}>{sentDate}</span>
+          </div>
+        </div>
+        <div className={classes.subject}>{message.subject || intl.get('MAIN.MAIL.NO_SUBJECT')}</div>
+      </div>
+      {/* <Grid container wrap="nowrap" spacing={2}>
         <Grid item>
           <UserAvatar userInfo={{ uid: fromParseResult[0].email, name: fromParseResult[0].name }} size="40px" />
         </Grid>
@@ -56,13 +116,12 @@ export default function MessageItem(props) {
             {fromParseResult[0].name || fromParseResult[0].email}
           </div>
           <div className={classes.subject}>
-            {message.subject}
-          </div>
-          <div className={classes.summary}>
-            {message.summary}
+            {message.subject || '没有主题'}
           </div>
         </Grid>
-      </Grid>
+        <span className={classes.date}>{sentDate}</span>
+        {message.flags.attached || message.flags.linkAttached ? <span className={classes.attachment}><CustomIcon iconName="icon-iconaccessory" size="18px" /></span> : ''}
+      </Grid> */}
     </ListItem>
   )
 }

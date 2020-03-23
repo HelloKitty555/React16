@@ -6,10 +6,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
+  mode: 'production',
   devtool: 'cheap-module-sourece-map',
   entry: {
     app: [
-      path.join(__dirname, 'src/index.js')
+      path.join(__dirname, 'src/index.jsx')
     ],
     vendor: ['react', 'react-router-dom', 'redux', 'react-dom', 'react-redux']
   },
@@ -17,20 +18,21 @@ module.exports = {
     path: path.join(__dirname, './dist'),
     filename: '[name].[chunkhash].js',
     chunkFilename: '[name].[chunkhash].js',
-    publicPath: '/'
+    publicPath: './'
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: ['babel-loader'],
+        test: /\.(js|jsx)$/,
+        use: ['babel-loader?cacheDirectory=true'],
         include: path.join(__dirname, 'src')
       },
       {
         test: /\.(css|scss)$/,
         use: ['style-loader', 'css-loader', 'sass-loader', 'postcss-loader']
-      }, {
-        test: /\.(png|jpg|gif)$/,
+      },
+      {
+        test: /\.(png|jpg|gif|woff|woff2|eot|ttf|svg)$/,
         use: [{
           loader: 'url-loader',
           options: {
@@ -72,6 +74,7 @@ module.exports = {
       _redux: path.join(__dirname, 'src/redux'),
       assets: path.join(__dirname, 'src/assets'),
       'react-dom': '@hot-loader/react-dom'
-    }
+    },
+    extensions: ['.js', '.jsx', '.json']
   }
 }

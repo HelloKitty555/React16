@@ -1,4 +1,9 @@
 {
+  "COMMON": {
+    "CANCEL": "取消",
+    "CONFIRM": "确定",
+    "TIPS": "提示"
+  },
   "LOGIN": {
     "LOGIN": "登录",
     "ACCOUNT": "账户",
@@ -7,9 +12,40 @@
     "LANGUAGE": "语言"
   },
   "MAIN": {
-    "ADDRESSBOOK" : "通讯录",
-    "SCHEDULE": "日程",
-    "FILECENTER": "文件中心",
-    "SETTING": "设置中心"
+    "MAIL": {
+      "NEW_MAIL": "新建邮件",
+      "INBOX": "收件箱",
+      "DRAFT": "草稿箱",
+      "SENT": "已发送",
+      "TRASH": "已删除",
+      "SPAM": "垃圾邮件",
+      "VIRUS": "病毒文件夹",
+      "ALL": "所有",
+      "UNREAD": "未读",
+      "FLAG": "旗帜",
+      "URGENT": "紧急邮件",
+      "ATTACH": "带附件",
+      "FROM": "发件人",
+      "TO": "收件人",
+      "CC": "抄送",
+      "BCC": "密送",
+      "SUBJECT": "主题",
+      "SEND": "发送",
+      "CANCEL": "取消",
+      "SEND_TO_ME": "发送至我",
+      "ATTACHMENT_NUMBER": "附件{count}个",
+      "NO_SUBJECT": "（无主题）",
+      "LACK_OF_SUBJECT": "缺少主题",
+      "SEND_WITHOUT_SUBJECT": "是否要不带主题发送",
+      "NO_MAIL": "该文件夹下没有邮件",
+      "SEARCHING": "正在搜索中...",
+      "NO_RESULT_FOUND": "未找到任何结果",
+      "MESSAGE_SUCCESS": "信件发送成功",
+      "MESSAGE_FAIL": "信件发送失败",
+      "NO_RECEVIER": "未选择收件人"
+    },
+    "SCHEDULE": {},
+    "ADDRESSBOOK": {},
+    "NETDISK": {}
   }
 }

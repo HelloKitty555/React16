@@ -1,23 +1,47 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Container from '@material-ui/core/Container'
-import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
 import UserAvatar from 'components/userAvatar/userAvatar'
-import parse from 'utils/email'
+import { parse } from 'utils/email'
 import ReadHeaderContact from 'components/read/readHeaderContact'
 import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import CustomIcon from 'components/customIcon/customIcon'
+import Hidden from '@material-ui/core/Hidden'
+import intl from 'react-intl-universal'
 
 const useStyles = makeStyles(theme => ({
   container: {
     marginBottom: '10px'
   },
+  bar: {
+    height: '60px',
+    display: 'flex'
+  },
+  grow: {
+    flex: 1
+  },
   subject: {
-    padding: '10px 0'
+    padding: '26px 0',
+    fontWeight: 'bolder',
+    fontSize: '24px'
+  },
+  info: {
+    display: 'flex',
+  },
+  brief: {
+    marginLeft: '12px'
+  },
+  avatar: {
+
   },
   contact: {
     marginTop: '10px'
+  },
+  briefName: {
+    color: theme.palette.text.primary
+  },
+  briefAction: {
+    color: theme.palette.text.secondary
   }
 }))
 export default function ReadHeader(props) {
@@ -40,34 +64,37 @@ export default function ReadHeader(props) {
   function handleExpandClick() {
     setExpanded(v => !v)
   }
+  // 返回
+  function goBack() {
+    window.history.go(-1)
+  }
   return (
-    <React.Fragment>
-      <CssBaseline />
-      <Container maxWidth={false} className={classes.container}>
-        <Grid container>
-          <Grid item xs={12}><Typography variant="h4" className={classes.subject}>{headerInfo.subject}</Typography></Grid>
-          <Grid item xs={12}>
-            <Grid container wrap="nowrap" spacing={3}>
-              <Grid item>
-                <UserAvatar userInfo={{ uid: fromEmail, name: fromName }} size="35px" />
-              </Grid>
-              <Grid item xs zeroMinWidth onClick={handleExpandClick}>
-                <Typography variant="subtitle2" component="div" noWrap>
-                  {fromName || fromEmail}
-                </Typography>
-                <Typography variant="subtitle2" component="div" noWrap>
-                  发送至我
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <div className={classes.contact}><ReadHeaderContact from={fromParseResult} to={toParseResult} cc={ccParseResult} /></div>
-            </Collapse>
-          </Grid>
-        </Grid>
-      </Container>
-    </React.Fragment>
+    <div className={classes.container}>
+      {/* <div className={classes.bar}>
+        <Hidden smUp>
+          <IconButton color="inherit" aria-label="menu" onClick={goBack}>
+            <CustomIcon iconName="icon-iconbacka" size="28px" />
+          </IconButton>
+        </Hidden>
+        <div className={classes.grow} />
+        <IconButton color="inherit" aria-label="delete">
+          <CustomIcon iconName="icon-icondelete" size="28px" />
+        </IconButton>
+        <IconButton color="inherit" aria-label="more">
+          <CustomIcon iconName="icon-icon_more" size="28px" />
+        </IconButton>
+      </div> */}
+      <div className={classes.subject}>{headerInfo.subject || intl.get('MAIN.MAIL.NO_SUBJECT')}</div>
+      <div className={classes.info} onClick={handleExpandClick}>
+        <div className={classes.avatar}><UserAvatar userInfo={{ uid: fromEmail, name: fromName }} size="35px" /></div>
+        <div className={classes.brief}>
+          <div className={classes.briefName}>{fromName || fromEmail}</div>
+          <div className={classes.briefAction}>{intl.get('MAIN.MAIL.SEND_TO_ME')}</div>
+        </div>
+      </div>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <div className={classes.contact}><ReadHeaderContact from={fromParseResult} to={toParseResult} cc={ccParseResult} /></div>
+      </Collapse>
+    </div>
   )
 }

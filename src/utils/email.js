@@ -1,4 +1,5 @@
-export default function parse(data) {
+// 
+export function parse(data) {
   let result = []
   const matchName = [
     /^".+"/ig, // "test" <test@test.com>
@@ -72,4 +73,9 @@ export default function parse(data) {
     result = temp
   }
   return result
+}
+// email地址合法性验证
+export function validate(email) {
+  const emailRE = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/ //eslint-disable-line
+  return emailRE.test(email)
 }

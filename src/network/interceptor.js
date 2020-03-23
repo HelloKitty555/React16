@@ -1,6 +1,7 @@
 
 // request拦截器
 import { getSid } from 'network/utils'
+import { useHistory } from 'react-router-dom'
 
 export function request(config) {
   if (getSid()) {
@@ -19,11 +20,19 @@ export function response(res) {
     return Promise.reject(res.data)
   }
   if (res.status === 500) {
-    console.log('后端出错')
+    console.log('服务器出错')
     return Promise.reject(res.data)
   }
   if (res.status === 200) {
     return Promise.resolve(res.data)
+  }
+  if (res.data.code === 'FA_INVALID_SESSION') {
+    console.log('会话过期，请重新登录')
+    return Promise.reject(res.data)
+  }
+  if (res.data.code === 'FA_UNAUTHORIZED') {
+    history.href="login"
+    return Promise.reject(res.data)
   }
 }
 export function reject(error) {
