@@ -1,7 +1,7 @@
 {
   "name": "react16",
   "version": "1.0.0",
-  "description": "This is a mobile web email system",
+  "description": "project base on react",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --hot --inline --config webpack.dev.config.js",

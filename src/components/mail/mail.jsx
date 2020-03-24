@@ -11,10 +11,11 @@ import { activeReadMid } from '_redux/mail/mail_redux'
 import { activeFolder } from '_redux/mail/mail_redux'
 import { Switch, Route, useHistory, useParams, useLocation } from 'react-router-dom'
 import Compose from 'components/compose/compose'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { CSSTransition, TransitionGroup, Transition } from 'react-transition-group'
 import { callbackify } from 'util'
 import intl from 'react-intl-universal'
 import Mailwork from 'assets/img/mail_work.svg'
+// import { play, exit } from './timelines'
 
 
 const useStyles = makeStyles(theme => ({
@@ -139,7 +140,7 @@ export default function Mail() {
   }
   return (
     <React.Fragment>
-      <Hidden smUp>
+      {/* <Hidden smUp>
         <TransitionGroup
           className={classes.mobile_messageList}
           childFactory={child => React.cloneElement(
@@ -156,34 +157,43 @@ export default function Mail() {
           </CSSTransition>
         </TransitionGroup>
 
-        {/* <Switch>
+        <Switch>
             <Route exact path="/main/mail/:fid" component={MessageListComponent} />
             <Route path="/main/mail/:fid/read/:mid" component={Read} />
             <Route path="/main/mail/compose" component={Compose} />
-          </Switch> */}
-      </Hidden>
-      <Hidden xsDown>
-        <div className={classes.container}>
-          <div className={classes.folderListCol}>
-            <div className={classes.newButtonWrapper}>
-              <Button variant="contained" color="primary" size="large" fullWidth classes={{ root: classes.newButton }} onClick={handleCompose}>{intl.get('MAIN.MAIL.NEW_MAIL')}</Button>
-            </div>
-            <div className={classes.folderListContainer}>
-              <FolderList handleFolderItemClick={handleFolderItemClick} />
-            </div>
+          </Switch>
+      </Hidden> */}
+      <div className={classes.container}>
+        <div className={classes.folderListCol}>
+          <div className={classes.newButtonWrapper}>
+            <Button variant="contained" color="primary" size="large" fullWidth classes={{ root: classes.newButton }} onClick={handleCompose}>{intl.get('MAIN.MAIL.NEW_MAIL')}</Button>
           </div>
-          <div className={classes.messageListCol}>
-            <Route path="/main/mail/:fid" component={PcMessageList} />
-          </div>
-          <div className={classes.readCol}>
-            <Switch>
-              <Route path="/main/mail/:fid/read/:mid" component={Read} />
-              <Route path="/main/mail/:fid/compose/:action/:mid" component={Compose} />
-              <Route component={noMatch} />
-            </Switch>
+          <div className={classes.folderListContainer}>
+            <FolderList handleFolderItemClick={handleFolderItemClick} />
           </div>
         </div>
-      </Hidden>
+        <div className={classes.messageListCol}>
+          <Route path="/main/mail/:fid" component={PcMessageList} />
+        </div>
+        <div className={classes.readCol}>
+          {/* <TransitionGroup>
+            <CSSTransition timeout={500}
+              classNames="fade-slide"
+              key={location.pathname}>
+              <Switch>
+                <Route path="/main/mail/:fid/read/:mid" component={Read} />
+                <Route path="/main/mail/:fid/compose/:action/:mid" component={Compose} />
+                <Route component={noMatch} />
+              </Switch>
+            </CSSTransition>
+          </TransitionGroup> */}
+          <Switch>
+            <Route path="/main/mail/:fid/read/:mid" component={Read} />
+            <Route path="/main/mail/:fid/compose/:action/:mid" component={Compose} />
+            <Route component={noMatch} />
+          </Switch>
+        </div>
+      </div>
     </React.Fragment>
   )
 }

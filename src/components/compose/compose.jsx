@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     zIndex: 2,
     top: '100%',
-    maxHeight: '500px',
+    maxHeight: '50vh',
     overflow: 'scroll',
     width: '300px',
     backgroundColor: theme.palette.background.paper,
