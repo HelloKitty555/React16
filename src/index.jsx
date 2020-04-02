@@ -8,6 +8,7 @@ import store from './redux/store'
 import './assets/iconfont/iconfont.css'
 import './assets/styles/index.scss'
 import './assets/styles/transition.scss'
+import './assets/styles/override.scss'
 import Cookie from 'js-cookie'
 import { SnackbarProvider } from 'notistack'
 

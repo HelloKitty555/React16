@@ -2,7 +2,6 @@
 //   const type = this.getExtName(filename)
 //   return $rootScope.settings.preview && ($rootScope.settings.previewType.indexOf(type) > -1 || false)
 // }
-
 // /**
 //  * 根据文件类型获取图标ID
 //  * @param  {String} filename 文件名称

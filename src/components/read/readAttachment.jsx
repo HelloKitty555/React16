@@ -17,15 +17,15 @@ const useStyles = makeStyles(theme => ({
     display: 'inline-block',
   }
 }))
-export default function ReadHeader(props) {
+export default function ReadAttachment(props) {
   const classes = useStyles()
-  const { attachments } = props
+  const { attachments, mid } = props
   return (
     <div className={classes.attachments}>
       <div className={classes.actionBar}>
         {intl.get('MAIN.MAIL.ATTACHMENT_NUMBER', { count: attachments.length })}
       </div>
-      {attachments.map((item) => <div className={classes.attachmentItem} key={item.id}><AttachmentItem attachment={item} /></div>)}
+      {attachments.map((item) => <div className={classes.attachmentItem} key={item.id}><AttachmentItem attachment={item} mid={mid} /></div>)}
     </div>
   )
 }

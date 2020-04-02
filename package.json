@@ -71,6 +71,8 @@
     "@material-ui/lab": "^4.0.0-alpha.45",
     "axios": "^0.18.0",
     "better-scroll": "^1.15.2",
+    "braft-editor": "^2.3.9",
+    "es6-shim": "^0.35.5",
     "js-cookie": "^2.2.0",
     "material-ui-confirm": "^2.0.4",
     "notistack": "^0.9.9",

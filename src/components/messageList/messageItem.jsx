@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux'
 import Hidden from '@material-ui/core/Hidden'
 import { useParams } from 'react-router-dom'
 import CustomIcon from 'components/customIcon/customIcon'
+import { useTheme } from '@material-ui/core/styles'
 import { isSameDate, isYesterday, getTimeSimple, isTheDayBeforeYesterday, isSameYear, getTextWithoutYear, getTextSimple, getCurrentDate } from 'utils/date'
 import intl from 'react-intl-universal'
 
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MessageItem(props) {
   const { message } = props
+  const theme = useTheme()
   const classes = useStyles({ read: message.flags.read })
   const fromParseResult = parse(message.from)
   const activeReadMid = useSelector(state => state.mail.activeReadMid)
@@ -100,28 +102,13 @@ export default function MessageItem(props) {
           <div className={classes.sender}>{fromParseResult[0].name || fromParseResult[0].email}</div>
           <div className={classes.flags}>
             {message.flags.calendar ? <CustomIcon iconName="icon-icon_schedule1" size="16px" /> : ''}
-            {message.flags.flagged ? <CustomIcon iconName="icon-iconflagcolor" size="16px" /> : ''}
+            {message.flags.flagged ? <CustomIcon iconName="icon-iconflagcolor" size="16px" color={theme.palette.error.main} /> : ''}
             {message.flags.attached || message.flags.linkAttached ? <span className={classes.attachment}><CustomIcon iconName="icon-iconaccessory" size="16px" /></span> : ''}
             <span className={classes.date}>{sentDate}</span>
           </div>
         </div>
         <div className={classes.subject}>{message.subject || intl.get('MAIN.MAIL.NO_SUBJECT')}</div>
       </div>
-      {/* <Grid container wrap="nowrap" spacing={2}>
-        <Grid item>
-          <UserAvatar userInfo={{ uid: fromParseResult[0].email, name: fromParseResult[0].name }} size="40px" />
-        </Grid>
-        <Grid item xs zeroMinWidth>
-          <div className={classes.sender}>
-            {fromParseResult[0].name || fromParseResult[0].email}
-          </div>
-          <div className={classes.subject}>
-            {message.subject || '没有主题'}
-          </div>
-        </Grid>
-        <span className={classes.date}>{sentDate}</span>
-        {message.flags.attached || message.flags.linkAttached ? <span className={classes.attachment}><CustomIcon iconName="icon-iconaccessory" size="18px" /></span> : ''}
-      </Grid> */}
     </ListItem>
   )
 }

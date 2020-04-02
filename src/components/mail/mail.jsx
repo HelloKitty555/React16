@@ -15,7 +15,6 @@ import { CSSTransition, TransitionGroup, Transition } from 'react-transition-gro
 import { callbackify } from 'util'
 import intl from 'react-intl-universal'
 import Mailwork from 'assets/img/mail_work.svg'
-// import { play, exit } from './timelines'
 
 
 const useStyles = makeStyles(theme => ({

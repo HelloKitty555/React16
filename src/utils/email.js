@@ -1,4 +1,4 @@
-// 
+// 解析email
 export function parse(data) {
   let result = []
   const matchName = [

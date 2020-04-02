@@ -77,7 +77,7 @@ export default {
       black: '#000',
       white: '#fff'
     },
-    type: 'main',
+    type: 'light',
     primary: {
       light: 'rgba(224,224,224)',
       main: 'rgb(46,67,84)',
@@ -172,7 +172,7 @@ export default {
   // shadows: ['none'],
   // 文字铸排
   typography: {
-    htmlFontSize: 13,
+    htmlFontSize: 14,
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     fontSize: 14,
     fontWeightLight: 300,

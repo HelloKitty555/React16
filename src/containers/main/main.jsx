@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import AppBar from '@material-ui/core/AppBar'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
-import Hidden from '@material-ui/core/Hidden'
 import IconButton from '@material-ui/core/IconButton'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import List from '@material-ui/core/List'
@@ -16,10 +14,6 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import { makeStyles } from '@material-ui/core/styles'
 import { Route, Switch, useHistory } from 'react-router-dom'
-import AddressBook from 'components/addressBook/addressBook'
-import Schedule from 'components/schedule/schedule'
-import Setting from 'components/setting/setting'
-import FileCenter from 'components/fileCenter/fileCenter'
 import Mail from 'components/mail/mail'
 import Read from 'components/read/read'
 import UserAvatar from 'components/userAvatar/userAvatar'
@@ -118,7 +112,7 @@ export default function Main(props) {
     setAnchorEl(null)
   }
   function handleLogout() {
-    wmsvrApi.logout().then((data)=> {
+    wmsvrApi.logout().then((data) => {
       if (data.code === 'S_OK') {
         history.push('/login')
       }
@@ -147,21 +141,7 @@ export default function Main(props) {
 
   return (
     <div className={classes.root}>
-      {/* 应用栏 */}
-      <Hidden smUp>
-        <main className={classes.content_mobile}>
-          <Switch>
-            <Route path="/main/mail/:fid" component={Mail} />
-            <Route path="/main/addressBook" component={AddressBook} />
-            <Route path="/main/fileCenter" component={FileCenter} />
-            <Route path="/main/schedule" component={Schedule} />
-            <Route path="/main/setting" component={Setting} />
-            <Route path="/main/read/:fid/:mid" component={Read} />
-          </Switch>
-        </main>
-      </Hidden>
-      <Hidden xsDown>
-        {/* <AppBar position="fixed" className={classes.appBar} color="default">
+      {/* <AppBar position="fixed" className={classes.appBar} color="default">
           <Toolbar>
             <IconButton
               color="primary"
@@ -211,17 +191,11 @@ export default function Main(props) {
             </Popover>
           </Toolbar>
         </AppBar> */}
-        <main className={classes.content}>
-          <Switch>
-            <Route path="/main/mail/:fid" component={Mail} />
-            <Route path="/main/addressBook" component={AddressBook} />
-            <Route path="/main/fileCenter" component={FileCenter} />
-            <Route path="/main/schedule" component={Schedule} />
-            <Route path="/main/setting" component={Setting} />
-            <Route path="/main/read/:fid/:mid" component={Read} />
-          </Switch>
-        </main>
-      </Hidden>
+      <main className={classes.content}>
+        <Switch>
+          <Route path="/main/mail/:fid" component={Mail} />
+        </Switch>
+      </main>
       {/* 抽屉 */}
       {/* <Drawer open={openDrawer} onClose={handleDrawerToggle} classes={{ paper: classes.drawerPaper }}>
         {drawer}

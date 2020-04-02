@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import ReactDOM from 'react-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
@@ -14,6 +15,8 @@ import { CSSTransition } from 'react-transition-group'
 import CustomIcon from 'components/customIcon/customIcon'
 import AutoMatchContactItem from 'components/compose/autoMatchContactItem'
 import Loading from 'assets/img/loading.gif'
+import 'braft-editor/dist/index.css'
+import BraftEditor from 'braft-editor'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -129,23 +132,40 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#ef5350',
     fontSize: '13px',
   },
-  editSection: {
+  composeEdit: {
     height: '90%',
-    overflow: 'scroll',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column'
   },
-  contactArea: {
+  composeAction: {
+    borderTop: '1px solid rgba(0,0,0,0.1)',
+    padding: '12px 0'
+  },
+  contactContainer: {
+  },
+  editorContainer: {
+    flex: 1
   },
   editArea: {
     paddingTop: '20px',
-    outline: 'none'
-  },
-  toolArea: {
-    borderTop: '1px solid rgba(0,0,0,0.1)',
-    padding: '12px 0'
+    outline: 'none',
+    flex: 1
   },
   sendButton: {
     marginRight: '12px'
   },
+  editor: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  editorControlBar: {
+    fontSize: theme.typography.htmlFontSize
+  },
+  editorContent: {
+    flex: 1,
+    overflow: 'scroll'
+  }
 }))
 export default function Compose(props) {
   const classes = useStyles()
@@ -162,7 +182,7 @@ export default function Compose(props) {
   const [cc, setCc] = useState([]) // 抄送
   const [bcc, setBcc] = useState([]) // 密送
   const [subject, setSubject] = useState('') // 主题
-  const [content, setContent] = useState('') // 内容
+  const [editorState, setEditorState] = useState(BraftEditor.createEditorState(null)) // 富文本编辑器内容
   const [quoteContent, setQuoteContent] = useState('') // 引用内容
   const [attachments, setAttachments] = useState([]) // 附件
   const [showCc, setShowCc] = useState(false) // 显示抄送栏
@@ -177,11 +197,34 @@ export default function Compose(props) {
   const [isAutoMatchFetching, setIsAutoMatchFetching] = useState(false) // 自动匹配查询中
   const [noResultFound, setNoResultFound] = useState(false) // 未找到任何结果
   const userAttr = JSON.parse(localStorage.getItem('userAttr')) // 用户属性
-  let initContent = '<br/><br/><br/>'
   const toInput = useRef(null)
   const ccInput = useRef(null)
   const bccInput = useRef(null)
   const editArea = useRef(null)
+  // 富文本编辑器工具栏功能列表
+  const controls = [
+    'undo',
+    'redo',
+    'font-size',
+    'bold', 'italic',
+    'underline',
+    'strike-through',
+    'text-color',
+    'text-align',
+    'text-indent',
+    'list-ul',
+    'list-ol',
+    'blockquote',
+    'code',
+    'hr',
+    'media',
+    'clear',
+    'emoji'
+  ]
+  // 富文本编辑器字号列表
+  const fontSizes = [
+    8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72
+  ]
   // 初始化写信
   useEffect(() => {
     setSubject('')
@@ -215,6 +258,7 @@ export default function Compose(props) {
             setComposeId(data.var.id)
             setSubject(data.var.subject)
             setQuoteContent(data.var.content)
+            setEditorState(BraftEditor.createEditorState(data.var.content))
             if (data.var.to) {
               let result = ''
               const toList = []
@@ -279,6 +323,10 @@ export default function Compose(props) {
   // 发信
   useEffect(() => {
     if (send) {
+      // 因为braftEditor生成的HTML某些组件只会生成结构而不会带上样式，如代码块，引用块，所以这里要带上blockquote，code的内置样式，在此处处理不太好，后续优化（todo）
+      let contentHtml = editorState.toHTML().replace(/<blockquote>/g, '<blocquote style="display: block;margin: 0 0 10px;padding: 15px 20px;background-color: #f1f2f3;border-left:5px solid #ccc;color:#666;font-style: italic">').
+      replace(/<pre><code>/g, '<pre style="font-weight:400;line-height:16px;word-wrap:break-word;white-space:pre-wrap;max-width:100%;max-height:100%;margin:10px 0;padding:15px;overflow:auto;background-color:#f1f2f3;border-radius:3px;color:#666;font-family:monospace;font-size: 14px;"><code>')
+      // 带上code的内置样式
       const validTo = []
       const validCc = []
       const validBcc = []
@@ -301,7 +349,7 @@ export default function Compose(props) {
           forbidDownload: false,
           subject,
           isHtml: true,
-          content,
+          content: contentHtml,
           attachments
         },
         action: 'deliver',
@@ -353,7 +401,6 @@ export default function Compose(props) {
   }, [autoMatchKeyword])
   // 发送
   function handleSend() {
-    const editContent = editArea.current.innerHTML
     if (to.length === 0) {
       // variant could be success, error, warning, info, or default
       enqueueSnackbar(intl.get("MAIN.MAIL.NO_RECEVIER"), { variant: 'warning' })
@@ -367,9 +414,7 @@ export default function Compose(props) {
         setSend(true)
       }, () => {
       })
-      // setOpenSubjectDialog(true)
     } else {
-      setContent(editContent)
       setSend(true)
     }
   }
@@ -547,10 +592,13 @@ export default function Compose(props) {
   function handleAccountButtonClick() {
     setShowAccountPanel(!showAccountPanel)
   }
+  function handleEditorChange(state) {
+    setEditorState(state)
+  }
   return (
     <div className={classes.container}>
-      <div className={classes.editSection}>
-        <div className={classes.contactArea}>
+      <div className={classes.composeEdit}>
+        <div className={classes.contactContainer}>
           {/* 发信人 */}
           <div className={classes.from}>
             <div>
@@ -640,14 +688,20 @@ export default function Compose(props) {
             <input type="text" className={classes.input} onBlur={handleSujecttBlur} defaultValue={subject} />
           </div>
         </div>
+        {/* draft-js编辑器 */}
+        {/* <Editor editorState={editorState} onChange={setEditorState} /> */}
+        {/* braft-editor编辑器 */}
+        <div className={classes.editorContainer}>
+          <BraftEditor value={editorState} onChange={handleEditorChange} controls={controls} fontSizes={fontSizes} className={classes.editor} controlBarClassName={classes.editorControlBar} contentClassName={classes.editorContent} />
+        </div>
         {/* 正文编辑区 */}
-        <div className={classes.editArea} contentEditable ref={editArea} onInput={handleContentInput} suppressContentEditableWarning={true}>
+        {/* <div className={classes.editArea} contentEditable ref={editArea} onInput={handleContentInput} suppressContentEditableWarning={true}>
           {quoteContent ? <div dangerouslySetInnerHTML={{ __html: quoteContent }} />
             : <div><br /><br /><br /></div>}
-        </div>
+        </div> */}
       </div>
       {/* 发信按钮区 */}
-      <div className={classes.toolArea}>
+      <div className={classes.composeAction}>
         <Button variant="contained" color="primary" classes={{ root: classes.sendButton }} onClick={handleSend} disableElevation>{intl.get('MAIN.MAIL.SEND')}</Button>
         <Button color="primary" classes={{ root: classes.cancelButton }} onClick={handleCancel}>{intl.get('MAIN.MAIL.CANCEL')}</Button>
       </div>

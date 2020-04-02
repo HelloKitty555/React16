@@ -62,7 +62,7 @@ export default function Read(props) {
         <React.Fragment>
           <div className={classes.header}><ReadHeader headerInfo={headerInfo} /></div>
           <ReadContent mailContent={mailContent} />
-          {attachments.length !== 0 ? <ReadAttachment attachments={attachments} /> : ''}
+          {attachments.length !== 0 ? <ReadAttachment attachments={attachments} mid={mid} /> : ''}
         </React.Fragment>
       )}
     </div>
