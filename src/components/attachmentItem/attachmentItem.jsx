@@ -6,6 +6,7 @@ import CustomIcon from 'components/customIcon/customIcon'
 import IconButton from '@material-ui/core/IconButton'
 import { getRequestUrl } from 'network/utils'
 import Cookie from 'js-cookie'
+import FileTypeImg from 'components/FileTypeImg/FileTypeImg'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -84,7 +85,7 @@ export default function AttachmentItem(props) {
   }
   return (
     <div className={classes.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <div className={classes.fileType}>{extName}</div>
+      <div className={classes.fileType}><FileTypeImg extName={extName} /></div>
       <div className={classes.fileInfo}>
         <div className={classes.fileName}>{fileName}</div>
         <div className={classes.fileSize}>{fileSize}</div>
