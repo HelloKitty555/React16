@@ -106,7 +106,7 @@ export default function MessageItem(props) {
             {message.flags.attached || message.flags.linkAttached ? <span className={classes.attachment}><CustomIcon iconName="icon-iconaccessory" size="16px" /></span> : ''}
             <span className={classes.date}>{sentDate}</span>
           </div>
-        </div>
+        </div> 
         <div className={classes.subject}>{message.subject || intl.get('MAIN.MAIL.NO_SUBJECT')}</div>
       </div>
     </ListItem>

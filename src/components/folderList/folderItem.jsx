@@ -38,6 +38,10 @@ const useStyles = makeStyles(theme => ({
     textOverflow: 'ellipsis',
     whiteSpace: 'nowarp',
   },
+  unreadNumber: {
+    verticalAlign: 'super',
+    marginRight: '12px'
+  },
   folderIcon: {
     margin: '0 auto'
   },
@@ -73,7 +77,10 @@ export default function FolderItem(props) {
           <CustomIcon iconName={folderIconMap[folderInfo.id] || 'icon-iconfolder'} size="24px" />
           <span className={classes.folderName}>{folderNameMap[folderInfo.id] || folderInfo.name}</span>
         </div>
-        {folderInfo.children && (expand ? <span onClick={handleClick}><CustomIcon iconName="icon-icontop" /></span> : <span onClick={handleClick}><CustomIcon iconName="icon-icondown" /></span>)}
+        <div className={classes.rightSide}>
+          {folderInfo.stats.unreadMessageCount ? <span className={classes.unreadNumber}>{folderInfo.stats.unreadMessageCount}</span> : ''}
+          {folderInfo.children && (expand ? <span onClick={handleClick}><CustomIcon iconName="icon-icontop" /></span> : <span onClick={handleClick}><CustomIcon iconName="icon-icondown" /></span>)}
+        </div>
       </ListItem>
       {folderInfo.children && (
         <Collapse in={expand} timeout="auto" unmountOnExit>

@@ -24,9 +24,9 @@ export default function NestedList(props) {
   const [folderList, setFolderList] = useState([])
   const {handleFolderItemClick} = props
   const [isFetching, setIsFetching] = useState(false)
-  useEffect(() =>{
+  useEffect(() => {
     setIsFetching(true)
-    wmsvrApi.getAllFolders().then(data => {
+    wmsvrApi.getAllFolders({ stats: true }).then(data => {
       if (data && data.code === 'S_OK') {
         setFolderList(data.var)
       }

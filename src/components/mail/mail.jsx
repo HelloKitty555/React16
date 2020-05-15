@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import PcMessageList from 'components/messageList/pcMessageList'
-import MobileMessageList from 'components/messageList/mobileMessageList'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import Read from 'components/read/read'
@@ -139,30 +138,8 @@ export default function Mail() {
   }
   return (
     <React.Fragment>
-      {/* <Hidden smUp>
-        <TransitionGroup
-          className={classes.mobile_messageList}
-          childFactory={child => React.cloneElement(
-            child,
-            { classNames: ANIMATION_MAP[history.action] }
-          )}>
-          <CSSTransition timeout={500}
-            key={location.pathname}>
-            <Switch>
-              <Route exact path="/main/mail/:fid" component={MobileMessageList} />
-              <Route path="/main/mail/:fid/read/:mid" component={Read} />
-              <Route path="/main/mail/:fid/compose" component={Compose} />
-            </Switch>
-          </CSSTransition>
-        </TransitionGroup>
-
-        <Switch>
-            <Route exact path="/main/mail/:fid" component={MessageListComponent} />
-            <Route path="/main/mail/:fid/read/:mid" component={Read} />
-            <Route path="/main/mail/compose" component={Compose} />
-          </Switch>
-      </Hidden> */}
       <div className={classes.container}>
+        {/* 文件夹列表 */}
         <div className={classes.folderListCol}>
           <div className={classes.newButtonWrapper}>
             <Button variant="contained" color="primary" size="large" fullWidth classes={{ root: classes.newButton }} onClick={handleCompose}>{intl.get('MAIN.MAIL.NEW_MAIL')}</Button>
@@ -171,21 +148,12 @@ export default function Mail() {
             <FolderList handleFolderItemClick={handleFolderItemClick} />
           </div>
         </div>
+        {/* 信件列表 */}
         <div className={classes.messageListCol}>
           <Route path="/main/mail/:fid" component={PcMessageList} />
         </div>
+        {/* 写信读信区域 */}
         <div className={classes.readCol}>
-          {/* <TransitionGroup>
-            <CSSTransition timeout={500}
-              classNames="fade-slide"
-              key={location.pathname}>
-              <Switch>
-                <Route path="/main/mail/:fid/read/:mid" component={Read} />
-                <Route path="/main/mail/:fid/compose/:action/:mid" component={Compose} />
-                <Route component={noMatch} />
-              </Switch>
-            </CSSTransition>
-          </TransitionGroup> */}
           <Switch>
             <Route path="/main/mail/:fid/read/:mid" component={Read} />
             <Route path="/main/mail/:fid/compose/:action/:mid" component={Compose} />

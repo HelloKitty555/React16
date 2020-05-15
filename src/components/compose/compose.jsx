@@ -17,6 +17,9 @@ import AutoMatchContactItem from 'components/compose/autoMatchContactItem'
 import Loading from 'assets/img/loading.gif'
 import 'braft-editor/dist/index.css'
 import BraftEditor from 'braft-editor'
+import IconButton from '@material-ui/core/IconButton'
+import ComposeAttachmentItem from 'components/compose/composeAttachmentItem'
+import Cookie from 'js-cookie'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -138,6 +141,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column'
   },
+  attachments: {
+    borderBottom: '1px solid rgba(0,0,0,0.1)'
+  },
+  actionBar: {
+    paddingBottom: '8px',
+    paddingTop: '8px',
+  },
+  attachmentItem: {
+    margin: '0 20px 15px 0',
+    display: 'inline-block',
+  },
   composeAction: {
     borderTop: '1px solid rgba(0,0,0,0.1)',
     padding: '12px 0'
@@ -165,6 +179,9 @@ const useStyles = makeStyles((theme) => ({
   editorContent: {
     flex: 1,
     overflow: 'scroll'
+  },
+  fileInput: {
+    display: 'none'
   }
 }))
 export default function Compose(props) {
@@ -175,7 +192,6 @@ export default function Compose(props) {
   const { action, mid, fid } = useParams()
   const [send, setSend] = useState(false) // 是否发信
   const [composeId, setComposeId] = useState('') // 写信id
-  const [inputValue, setInputValue] = useState('') // 输入值
   const [account, setAccount] = useState('') // 发信人
   const [accountList, setAccountList] = useState([]) // 发信人列表
   const [to, setTo] = useState([]) // 收件人
@@ -183,8 +199,8 @@ export default function Compose(props) {
   const [bcc, setBcc] = useState([]) // 密送
   const [subject, setSubject] = useState('') // 主题
   const [editorState, setEditorState] = useState(BraftEditor.createEditorState(null)) // 富文本编辑器内容
-  const [quoteContent, setQuoteContent] = useState('') // 引用内容
   const [attachments, setAttachments] = useState([]) // 附件
+  const [files, setFiles] = useState('') // input file
   const [showCc, setShowCc] = useState(false) // 显示抄送栏
   const [showBcc, setShowBcc] = useState(false) // 显示密送栏
   const [showAccountPanel, setShowAccountPanel] = useState(false) // 显示发信人选择列表
@@ -325,7 +341,7 @@ export default function Compose(props) {
     if (send) {
       // 因为braftEditor生成的HTML某些组件只会生成结构而不会带上样式，如代码块，引用块，所以这里要带上blockquote，code的内置样式，在此处处理不太好，后续优化（todo）
       let contentHtml = editorState.toHTML().replace(/<blockquote>/g, '<blocquote style="display: block;margin: 0 0 10px;padding: 15px 20px;background-color: #f1f2f3;border-left:5px solid #ccc;color:#666;font-style: italic">').
-      replace(/<pre><code>/g, '<pre style="font-weight:400;line-height:16px;word-wrap:break-word;white-space:pre-wrap;max-width:100%;max-height:100%;margin:10px 0;padding:15px;overflow:auto;background-color:#f1f2f3;border-radius:3px;color:#666;font-family:monospace;font-size: 14px;"><code>')
+        replace(/<pre><code>/g, '<pre style="font-weight:400;line-height:16px;word-wrap:break-word;white-space:pre-wrap;max-width:100%;max-height:100%;margin:10px 0;padding:15px;overflow:auto;background-color:#f1f2f3;border-radius:3px;color:#666;font-family:monospace;font-size: 14px;"><code>')
       // 带上code的内置样式
       const validTo = []
       const validCc = []
@@ -333,6 +349,14 @@ export default function Compose(props) {
       to.forEach((item) => { item.valid && validTo.push(item.email) })
       cc.forEach((item) => { item.valid && validCc.push(item.email) })
       bcc.forEach((item) => { item.valid && validBcc.push(item.email) })
+      const attachmentsList = attachments.map((item) => {
+        return {
+          id: item.id,
+          type: item.type,
+          name: item.name,
+          size: item.size
+        }
+      })
       const options = {
         attrs: {
           scheduleDate: null,
@@ -350,7 +374,7 @@ export default function Compose(props) {
           subject,
           isHtml: true,
           content: contentHtml,
-          attachments
+          attachments: attachmentsList
         },
         action: 'deliver',
         id: composeId,
@@ -418,6 +442,36 @@ export default function Compose(props) {
       setSend(true)
     }
   }
+  // 附件上传准备（分两步，先准备，再上传，上传过程目前在附件组件中进行，可能这样写不是最佳实践，后续可以进行优化）
+  useEffect(() => {
+    for (let i = 0; i < files.length; i++) {
+      prepareUpload(files[i])
+    }
+    function prepareUpload(file) {
+      const data = {
+        inlined: false,
+        size: file.size,
+        fileName: file.name,
+        attachmentId: -1,
+        composeId
+      }
+      wmsvrApi.uploadPrepare(data).then((data) => {
+        if (data.code === 'S_OK') {
+          const attachment = {
+            id: data.var.attachmentId,
+            name: data.var.fileName,
+            type: 'upload',
+            size: data.var.size,
+            file // file文件对象 该值非接口字段，发信时可去除
+          }
+          console.log(attachments)
+          setAttachments([...attachments, attachment])
+        }
+      }, (error) => {
+        console.log(error)
+      })
+    }
+  }, [files])
   // 发信人改变处理
   function handleAccountChange(event) {
     setAccount(event.target.value)
@@ -592,8 +646,25 @@ export default function Compose(props) {
   function handleAccountButtonClick() {
     setShowAccountPanel(!showAccountPanel)
   }
+  // 编辑区状态改变
   function handleEditorChange(state) {
     setEditorState(state)
+  }
+  // 处理附件Input的Change事件
+  function handleFileInputChange(event) {
+    if (event.target.files.length !== 0) {
+      setFiles(event.target.files)
+    }
+  }
+  // 删除附件
+  function deleteAttachment(id) {
+    const temp = []
+    attachments.forEach((item) => {
+      if (item.id !== id) {
+        temp.push(item)
+      }
+    })
+    setAttachments(temp)
   }
   return (
     <div className={classes.container}>
@@ -687,6 +758,13 @@ export default function Compose(props) {
             <Button variant="contained" color="primary" className={classes.labelButton} disableElevation>{intl.get('MAIN.MAIL.SUBJECT')}</Button>
             <input type="text" className={classes.input} onBlur={handleSujecttBlur} defaultValue={subject} />
           </div>
+          {/* 已上传附件 */}
+          {attachments.length !== 0 && <div className={classes.attachments}>
+            <div className={classes.actionBar}>
+              {intl.get('MAIN.MAIL.ATTACHMENT_NUMBER', { count: attachments.length })}
+            </div>
+            {attachments.map((item) => <div className={classes.attachmentItem} key={item.id}><ComposeAttachmentItem attachment={item} composeId={composeId} deleteAttachment={deleteAttachment} /></div>)}
+          </div>}
         </div>
         {/* draft-js编辑器 */}
         {/* <Editor editorState={editorState} onChange={setEditorState} /> */}
@@ -702,8 +780,17 @@ export default function Compose(props) {
       </div>
       {/* 发信按钮区 */}
       <div className={classes.composeAction}>
+        {/* 发送 */}
         <Button variant="contained" color="primary" classes={{ root: classes.sendButton }} onClick={handleSend} disableElevation>{intl.get('MAIN.MAIL.SEND')}</Button>
+        {/* 取消 */}
         <Button color="primary" classes={{ root: classes.cancelButton }} onClick={handleCancel}>{intl.get('MAIN.MAIL.CANCEL')}</Button>
+        {/* 附件上传 */}
+        <input className={classes.fileInput} id="icon-button-file" type="file" onChange={handleFileInputChange} multiple="multiple" />
+        <label htmlFor="icon-button-file">
+          <IconButton size="small" component="span">
+            <CustomIcon iconName="icon-iconaccessorysmall1" size={28} />
+          </IconButton>
+        </label>
       </div>
     </div>
   )

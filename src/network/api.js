@@ -28,7 +28,9 @@ const wmsvrApi = {
   getPOPAccounts: payload => post('user:getPOPAccounts', payload),
   listSharedAccessMbox: payload => post('mbox:listSharedAccessMbox', payload),
   restoreDraft: payload => post('mbox:restoreDraft', payload), // 恢复草稿
-  autoMatch: payload => post('oab:autoMatch', payload) // 组织联系人自动匹配
+  autoMatch: payload => post('oab:autoMatch', payload), // 组织联系人自动匹配
+  uploadPrepare: payload => post('upload:prepare', payload), // 上传准备
+  updateMessageInfos: payload => post('mbox:updateMessageInfos', payload), // 信件更改
   // 组织通讯录
   // 个人通讯录
   // 日程功能

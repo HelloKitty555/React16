@@ -1,9 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
-// const backEndServer = 'http://lunkrcm05.rd.mt'
-const backEndServer = 'http://mt1.icoremail.net'
-// const backEndServer = 'http://cim.rd.mt'
+const backEndServer = 'http://lunkrauth01.rd.mt'
 
 module.exports = {
   devtool: 'inline-source-map',

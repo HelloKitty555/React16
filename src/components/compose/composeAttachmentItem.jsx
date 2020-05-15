@@ -8,6 +8,7 @@ import { getRequestUrl } from 'network/utils'
 import Cookie from 'js-cookie'
 import FileTypeImg from 'components/FileTypeImg/FileTypeImg'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -64,23 +65,43 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function AttachmentItem(props) {
-  const { attachment, mid } = props
+export default function ComposeAttachmentItem(props) {
+  const { attachment, composeId, deleteAttachment } = props
   const classes = useStyles()
-  const fileName = attachment.filename || attachment.fileName
+  const fileName = attachment.name
   const extName = getExtName(fileName)
-  const fileSize = formatSize(attachment.estimateSize || attachment.size)
-  const uploadProgress = attachment.uploadProgress || 0
-  const [showActionCover, setShowActionCover] = useState(false) // 是否显示操作浮层（下载、预览等操作）
-  const downloadUrl = getRequestUrl({
-    query: {
-      func: 'mbox:getMessageData',
-      sid: Cookie.get('Coremail.sid'),
-      mid,
-      part: attachment.id,
-      mode: 'download'
-    }
-  })
+  const fileSize = formatSize(attachment.size)
+  const [uploadProgress, setUploadProgress] = useState(0) // 上传进度
+  const [uploadFinish, setUploadFinish] = useState(false) // 是否上传完成
+  const [showActionCover, setShowActionCover] = useState(false) // 是否显示操作浮层（下载、预览等操作
+  // 附件上传
+  useEffect(() => {
+    const uploadUrl = getRequestUrl({
+      query: {
+        func: 'upload:directData',
+        sid: Cookie.get('Coremail.sid'),
+        composeId,
+        attachmentId: attachment.id,
+        offset: 0
+      }
+    })
+    axios.post(uploadUrl, attachment.file, {
+      headers: {
+        'Content-Type': 'application/octet-stream'
+      },
+      transformRequest: [function (data) {
+        return data
+      }],
+      onUploadProgress: progressEvent => {
+        let complete = progressEvent.loaded / progressEvent.total * 100 | 0
+        setUploadProgress(complete)
+      }
+    }).then((response) => {
+      if (response.status === 200) {
+        setUploadFinish(true)
+      }
+    })
+  }, [])
   // 处理鼠标划入
   function handleMouseEnter() {
     setShowActionCover(true)
@@ -88,10 +109,6 @@ export default function AttachmentItem(props) {
   // 处理鼠标划出
   function handleMouseLeave() {
     setShowActionCover(false)
-  }
-  // 下载附件
-  function downloadAttachment() {
-    window.location.href = downloadUrl
   }
   return (
     <div className={classes.container} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -103,7 +120,7 @@ export default function AttachmentItem(props) {
         </div>
       </div>
       {showActionCover && <div className={classes.actionCover}>
-        <IconButton size="small" className={classes.refreshButton} onClick={downloadAttachment}><CustomIcon iconName="icon-icon-filedownload" size={26} color={'#fff'} /></IconButton>
+        <IconButton size="small" className={classes.refreshButton} onClick={() => deleteAttachment(attachment.id)}><CustomIcon iconName="icon-icon_del" size={26} color={'#fff'} /></IconButton>
       </div>}
       {uploadProgress > 0 && uploadProgress < 100 ? <div className={classes.uploadProgress}>
         <LinearProgress variant="determinate" value={uploadProgress} />
