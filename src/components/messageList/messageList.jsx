@@ -3,16 +3,12 @@ import { useDispatch } from 'react-redux'
 import { activeReadMid } from '_redux/mail/mail_redux'
 import List from '@material-ui/core/List'
 import MessageItem from 'components/messageList/messageItem'
-import ScrollView from 'components/scrollView/scrollView'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory, useParams } from 'react-router-dom'
 import wmsvrApi from 'network/api'
 import CustomIcon from 'components/customIcon/customIcon'
 import IconButton from '@material-ui/core/IconButton'
 import SkeletonLoading from 'components/messageList/SkeletonLoading'
-import Select from '@material-ui/core/Select'
-import FormControl from '@material-ui/core/FormControl'
-import MenuItem from '@material-ui/core/MenuItem'
 import intl from 'react-intl-universal'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Button from '@material-ui/core/Button'
@@ -93,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '20px'
   }
 }))
-export default function PcMessageList() {
+export default function MessageList() {
   const classes = useStyles()
   const history = useHistory()
   const dispatch = useDispatch()
@@ -287,12 +283,6 @@ export default function PcMessageList() {
           <span className={classes.emptyText}>{intl.get('MAIN.MAIL.NO_MAIL')}</span>
           </div> : ''}
       </div>
-      {/* <ScrollView svHeight="calc(100% - 56px)" data={messageList} disableBounce={true}>
-        <List>
-          {messageList.map((message) => <div key={message.id} onClick={() => handleMessageClick(message.id)} ><MessageItem message={message} /></div>)}
-        </List>
-        {messageList.length === 0 ? <div className={classes.emptyTips}>该文件夹下没有邮件</div> : ''}
-      </ScrollView> */}
     </div>
   )
 }

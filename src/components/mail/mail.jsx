@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import PcMessageList from 'components/messageList/pcMessageList'
+import MessageList from 'components/messageList/messageList'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import Read from 'components/read/read'
@@ -150,7 +150,7 @@ export default function Mail() {
         </div>
         {/* 信件列表 */}
         <div className={classes.messageListCol}>
-          <Route path="/main/mail/:fid" component={PcMessageList} />
+          <Route path="/main/mail/:fid" component={MessageList} />
         </div>
         {/* 写信读信区域 */}
         <div className={classes.readCol}>
